@@ -1,0 +1,1826 @@
+{
+    "openapi":  "3.0.3",
+    "info":  {
+                 "title":  "Student Information Management System API",
+                 "version":  "1.0.0",
+                 "description":  "Laravel Sanctum API. Management resources require Admin or Staff. Instructor and Student self-service endpoints enforce ownership. Resource update routes documented as PUT also accept PATCH."
+             },
+    "servers":  [
+                    {
+                        "url":  "http://127.0.0.1:8000"
+                    }
+                ],
+    "tags":  [
+                 {
+                     "name":  "Authentication"
+                 },
+                 {
+                     "name":  "Students"
+                 },
+                 {
+                     "name":  "Programs"
+                 },
+                 {
+                     "name":  "Courses"
+                 },
+                 {
+                     "name":  "Academic Terms"
+                 },
+                 {
+                     "name":  "Course Offerings"
+                 },
+                 {
+                     "name":  "Enrollments"
+                 },
+                 {
+                     "name":  "Grades"
+                 },
+                 {
+                     "name":  "Academic Records"
+                 },
+                 {
+                     "name":  "Self-service"
+                 },
+                 {
+                     "name":  "Instructor"
+                 }
+             ],
+    "paths":  {
+                  "/api/v1/auth/login":  {
+                                             "post":  {
+                                                          "tags":  [
+                                                                       "Authentication"
+                                                                   ],
+                                                          "summary":  "Login and create a Sanctum token",
+                                                          "requestBody":  {
+                                                                              "required":  true,
+                                                                              "content":  {
+                                                                                              "application/json":  {
+                                                                                                                       "schema":  {
+                                                                                                                                      "$ref":  "#/components/schemas/LoginInput"
+                                                                                                                                  },
+                                                                                                                       "example":  {
+                                                                                                                                       "email":  "admin@example.com",
+                                                                                                                                       "password":  "password"
+                                                                                                                                   }
+                                                                                                                   }
+                                                                                          }
+                                                                          },
+                                                          "responses":  {
+                                                                            "200":  {
+                                                                                        "description":  "Token and user",
+                                                                                        "content":  {
+                                                                                                        "application/json":  {
+                                                                                                                                 "schema":  {
+                                                                                                                                                "$ref":  "#/components/schemas/TokenResponse"
+                                                                                                                                            }
+                                                                                                                             }
+                                                                                                    }
+                                                                                    },
+                                                                            "401":  {
+                                                                                        "$ref":  "#/components/responses/Unauthenticated"
+                                                                                    },
+                                                                            "422":  {
+                                                                                        "$ref":  "#/components/responses/Validation"
+                                                                                    }
+                                                                        }
+                                                      }
+                                         },
+                  "/api/v1/auth/logout":  {
+                                              "post":  {
+                                                           "tags":  [
+                                                                        "Authentication"
+                                                                    ],
+                                                           "summary":  "Revoke current token",
+                                                           "security":  [
+                                                                            {
+                                                                                "sanctum":  [
+
+                                                                                            ]
+                                                                            }
+                                                                        ],
+                                                           "responses":  {
+                                                                             "204":  {
+                                                                                         "description":  "Logged out"
+                                                                                     },
+                                                                             "401":  {
+                                                                                         "$ref":  "#/components/responses/Unauthenticated"
+                                                                                     }
+                                                                         }
+                                                       }
+                                          },
+                  "/api/v1/auth/me":  {
+                                          "get":  {
+                                                      "tags":  [
+                                                                   "Authentication"
+                                                               ],
+                                                      "summary":  "Current user and role",
+                                                      "security":  [
+                                                                       {
+                                                                           "sanctum":  [
+
+                                                                                       ]
+                                                                       }
+                                                                   ],
+                                                      "responses":  {
+                                                                        "200":  {
+                                                                                    "$ref":  "#/components/responses/Success"
+                                                                                },
+                                                                        "401":  {
+                                                                                    "$ref":  "#/components/responses/Unauthenticated"
+                                                                                }
+                                                                    }
+                                                  }
+                                      },
+                  "/api/v1/students":  {
+                                           "get":  {
+                                                       "tags":  [
+                                                                    "Students"
+                                                                ],
+                                                       "summary":  "List students (Admin/Staff)",
+                                                       "security":  [
+                                                                        {
+                                                                            "sanctum":  [
+
+                                                                                        ]
+                                                                        }
+                                                                    ],
+                                                       "parameters":  [
+                                                                          {
+                                                                              "$ref":  "#/components/parameters/Search"
+                                                                          },
+                                                                          {
+                                                                              "$ref":  "#/components/parameters/ProgramId"
+                                                                          },
+                                                                          {
+                                                                              "$ref":  "#/components/parameters/YearLevel"
+                                                                          },
+                                                                          {
+                                                                              "$ref":  "#/components/parameters/StudentStatus"
+                                                                          },
+                                                                          {
+                                                                              "$ref":  "#/components/parameters/Sort"
+                                                                          },
+                                                                          {
+                                                                              "$ref":  "#/components/parameters/Direction"
+                                                                          },
+                                                                          {
+                                                                              "$ref":  "#/components/parameters/Page"
+                                                                          },
+                                                                          {
+                                                                              "$ref":  "#/components/parameters/PerPage"
+                                                                          }
+                                                                      ],
+                                                       "responses":  {
+                                                                         "200":  {
+                                                                                     "$ref":  "#/components/responses/Paginated"
+                                                                                 },
+                                                                         "401":  {
+                                                                                     "$ref":  "#/components/responses/Unauthenticated"
+                                                                                 },
+                                                                         "403":  {
+                                                                                     "$ref":  "#/components/responses/Forbidden"
+                                                                                 },
+                                                                         "422":  {
+                                                                                     "$ref":  "#/components/responses/Validation"
+                                                                                 }
+                                                                     }
+                                                   },
+                                           "post":  {
+                                                        "tags":  [
+                                                                     "Students"
+                                                                 ],
+                                                        "summary":  "Create student (Admin/Staff)",
+                                                        "security":  [
+                                                                         {
+                                                                             "sanctum":  [
+
+                                                                                         ]
+                                                                         }
+                                                                     ],
+                                                        "requestBody":  {
+                                                                            "$ref":  "#/components/requestBodies/Student"
+                                                                        },
+                                                        "responses":  {
+                                                                          "201":  {
+                                                                                      "$ref":  "#/components/responses/Success"
+                                                                                  },
+                                                                          "409":  {
+                                                                                      "$ref":  "#/components/responses/Conflict"
+                                                                                  },
+                                                                          "422":  {
+                                                                                      "$ref":  "#/components/responses/Validation"
+                                                                                  }
+                                                                      }
+                                                    }
+                                       },
+                  "/api/v1/students/{id}":  {
+                                                "parameters":  [
+                                                                   {
+                                                                       "$ref":  "#/components/parameters/Id"
+                                                                   }
+                                                               ],
+                                                "get":  {
+                                                            "tags":  [
+                                                                         "Students"
+                                                                     ],
+                                                            "summary":  "Get student (Admin/Staff)",
+                                                            "security":  [
+                                                                             {
+                                                                                 "sanctum":  [
+
+                                                                                             ]
+                                                                             }
+                                                                         ],
+                                                            "responses":  {
+                                                                              "200":  {
+                                                                                          "$ref":  "#/components/responses/Success"
+                                                                                      },
+                                                                              "404":  {
+                                                                                          "$ref":  "#/components/responses/NotFound"
+                                                                                      }
+                                                                          }
+                                                        },
+                                                "put":  {
+                                                            "tags":  [
+                                                                         "Students"
+                                                                     ],
+                                                            "summary":  "Update student (Admin/Staff)",
+                                                            "security":  [
+                                                                             {
+                                                                                 "sanctum":  [
+
+                                                                                             ]
+                                                                             }
+                                                                         ],
+                                                            "requestBody":  {
+                                                                                "$ref":  "#/components/requestBodies/Student"
+                                                                            },
+                                                            "responses":  {
+                                                                              "200":  {
+                                                                                          "$ref":  "#/components/responses/Success"
+                                                                                      },
+                                                                              "422":  {
+                                                                                          "$ref":  "#/components/responses/Validation"
+                                                                                      },
+                                                                              "404":  {
+                                                                                          "$ref":  "#/components/responses/NotFound"
+                                                                                      }
+                                                                          }
+                                                        },
+                                                "delete":  {
+                                                               "tags":  [
+                                                                            "Students"
+                                                                        ],
+                                                               "summary":  "Delete student (Admin/Staff)",
+                                                               "security":  [
+                                                                                {
+                                                                                    "sanctum":  [
+
+                                                                                                ]
+                                                                                }
+                                                                            ],
+                                                               "responses":  {
+                                                                                 "204":  {
+                                                                                             "description":  "Deleted"
+                                                                                         },
+                                                                                 "404":  {
+                                                                                             "$ref":  "#/components/responses/NotFound"
+                                                                                         }
+                                                                             }
+                                                           }
+                                            },
+                  "/api/v1/students/{id}/academic-record":  {
+                                                                "get":  {
+                                                                            "tags":  [
+                                                                                         "Academic Records"
+                                                                                     ],
+                                                                            "summary":  "Student academic record; Admin/Staff or linked Student only",
+                                                                            "security":  [
+                                                                                             {
+                                                                                                 "sanctum":  [
+
+                                                                                                             ]
+                                                                                             }
+                                                                                         ],
+                                                                            "parameters":  [
+                                                                                               {
+                                                                                                   "$ref":  "#/components/parameters/Id"
+                                                                                               }
+                                                                                           ],
+                                                                            "responses":  {
+                                                                                              "200":  {
+                                                                                                          "$ref":  "#/components/responses/Success"
+                                                                                                      },
+                                                                                              "403":  {
+                                                                                                          "$ref":  "#/components/responses/Forbidden"
+                                                                                                      },
+                                                                                              "404":  {
+                                                                                                          "$ref":  "#/components/responses/NotFound"
+                                                                                                      }
+                                                                                          }
+                                                                        }
+                                                            },
+                  "/api/v1/programs":  {
+                                           "get":  {
+                                                       "tags":  [
+                                                                    "Programs"
+                                                                ],
+                                                       "summary":  "List programs (Admin/Staff)",
+                                                       "security":  [
+                                                                        {
+                                                                            "sanctum":  [
+
+                                                                                        ]
+                                                                        }
+                                                                    ],
+                                                       "responses":  {
+                                                                         "200":  {
+                                                                                     "$ref":  "#/components/responses/Paginated"
+                                                                                 }
+                                                                     }
+                                                   },
+                                           "post":  {
+                                                        "tags":  [
+                                                                     "Programs"
+                                                                 ],
+                                                        "summary":  "Create program (Admin/Staff)",
+                                                        "security":  [
+                                                                         {
+                                                                             "sanctum":  [
+
+                                                                                         ]
+                                                                         }
+                                                                     ],
+                                                        "requestBody":  {
+                                                                            "$ref":  "#/components/requestBodies/Program"
+                                                                        },
+                                                        "responses":  {
+                                                                          "201":  {
+                                                                                      "$ref":  "#/components/responses/Success"
+                                                                                  },
+                                                                          "422":  {
+                                                                                      "$ref":  "#/components/responses/Validation"
+                                                                                  },
+                                                                          "409":  {
+                                                                                      "$ref":  "#/components/responses/Conflict"
+                                                                                  }
+                                                                      }
+                                                    }
+                                       },
+                  "/api/v1/programs/{id}":  {
+                                                "parameters":  [
+                                                                   {
+                                                                       "$ref":  "#/components/parameters/Id"
+                                                                   }
+                                                               ],
+                                                "get":  {
+                                                            "tags":  [
+                                                                         "Programs"
+                                                                     ],
+                                                            "summary":  "Get program (Admin/Staff)",
+                                                            "security":  [
+                                                                             {
+                                                                                 "sanctum":  [
+
+                                                                                             ]
+                                                                             }
+                                                                         ],
+                                                            "responses":  {
+                                                                              "200":  {
+                                                                                          "$ref":  "#/components/responses/Success"
+                                                                                      },
+                                                                              "404":  {
+                                                                                          "$ref":  "#/components/responses/NotFound"
+                                                                                      }
+                                                                          }
+                                                        },
+                                                "put":  {
+                                                            "tags":  [
+                                                                         "Programs"
+                                                                     ],
+                                                            "summary":  "Update program (Admin/Staff)",
+                                                            "security":  [
+                                                                             {
+                                                                                 "sanctum":  [
+
+                                                                                             ]
+                                                                             }
+                                                                         ],
+                                                            "requestBody":  {
+                                                                                "$ref":  "#/components/requestBodies/Program"
+                                                                            },
+                                                            "responses":  {
+                                                                              "200":  {
+                                                                                          "$ref":  "#/components/responses/Success"
+                                                                                      },
+                                                                              "422":  {
+                                                                                          "$ref":  "#/components/responses/Validation"
+                                                                                      }
+                                                                          }
+                                                        },
+                                                "delete":  {
+                                                               "tags":  [
+                                                                            "Programs"
+                                                                        ],
+                                                               "summary":  "Delete program (Admin/Staff)",
+                                                               "security":  [
+                                                                                {
+                                                                                    "sanctum":  [
+
+                                                                                                ]
+                                                                                }
+                                                                            ],
+                                                               "responses":  {
+                                                                                 "204":  {
+                                                                                             "description":  "Deleted"
+                                                                                         }
+                                                                             }
+                                                           }
+                                            },
+                  "/api/v1/courses":  {
+                                          "get":  {
+                                                      "tags":  [
+                                                                   "Courses"
+                                                               ],
+                                                      "summary":  "List courses (Admin/Staff)",
+                                                      "security":  [
+                                                                       {
+                                                                           "sanctum":  [
+
+                                                                                       ]
+                                                                       }
+                                                                   ],
+                                                      "responses":  {
+                                                                        "200":  {
+                                                                                    "$ref":  "#/components/responses/Paginated"
+                                                                                }
+                                                                    }
+                                                  },
+                                          "post":  {
+                                                       "tags":  [
+                                                                    "Courses"
+                                                                ],
+                                                       "summary":  "Create course (Admin/Staff)",
+                                                       "security":  [
+                                                                        {
+                                                                            "sanctum":  [
+
+                                                                                        ]
+                                                                        }
+                                                                    ],
+                                                       "requestBody":  {
+                                                                           "$ref":  "#/components/requestBodies/Course"
+                                                                       },
+                                                       "responses":  {
+                                                                         "201":  {
+                                                                                     "$ref":  "#/components/responses/Success"
+                                                                                 },
+                                                                         "422":  {
+                                                                                     "$ref":  "#/components/responses/Validation"
+                                                                                 }
+                                                                     }
+                                                   }
+                                      },
+                  "/api/v1/courses/{id}":  {
+                                               "parameters":  [
+                                                                  {
+                                                                      "$ref":  "#/components/parameters/Id"
+                                                                  }
+                                                              ],
+                                               "get":  {
+                                                           "tags":  [
+                                                                        "Courses"
+                                                                    ],
+                                                           "summary":  "Get course (Admin/Staff)",
+                                                           "security":  [
+                                                                            {
+                                                                                "sanctum":  [
+
+                                                                                            ]
+                                                                            }
+                                                                        ],
+                                                           "responses":  {
+                                                                             "200":  {
+                                                                                         "$ref":  "#/components/responses/Success"
+                                                                                     },
+                                                                             "404":  {
+                                                                                         "$ref":  "#/components/responses/NotFound"
+                                                                                     }
+                                                                         }
+                                                       },
+                                               "put":  {
+                                                           "tags":  [
+                                                                        "Courses"
+                                                                    ],
+                                                           "summary":  "Update course (Admin/Staff)",
+                                                           "security":  [
+                                                                            {
+                                                                                "sanctum":  [
+
+                                                                                            ]
+                                                                            }
+                                                                        ],
+                                                           "requestBody":  {
+                                                                               "$ref":  "#/components/requestBodies/Course"
+                                                                           },
+                                                           "responses":  {
+                                                                             "200":  {
+                                                                                         "$ref":  "#/components/responses/Success"
+                                                                                     },
+                                                                             "422":  {
+                                                                                         "$ref":  "#/components/responses/Validation"
+                                                                                     }
+                                                                         }
+                                                       },
+                                               "delete":  {
+                                                              "tags":  [
+                                                                           "Courses"
+                                                                       ],
+                                                              "summary":  "Delete course (Admin/Staff)",
+                                                              "security":  [
+                                                                               {
+                                                                                   "sanctum":  [
+
+                                                                                               ]
+                                                                               }
+                                                                           ],
+                                                              "responses":  {
+                                                                                "204":  {
+                                                                                            "description":  "Deleted"
+                                                                                        }
+                                                                            }
+                                                          }
+                                           },
+                  "/api/v1/academic-terms":  {
+                                                 "get":  {
+                                                             "tags":  [
+                                                                          "Academic Terms"
+                                                                      ],
+                                                             "summary":  "List terms (Admin/Staff)",
+                                                             "security":  [
+                                                                              {
+                                                                                  "sanctum":  [
+
+                                                                                              ]
+                                                                              }
+                                                                          ],
+                                                             "responses":  {
+                                                                               "200":  {
+                                                                                           "$ref":  "#/components/responses/Paginated"
+                                                                                       }
+                                                                           }
+                                                         },
+                                                 "post":  {
+                                                              "tags":  [
+                                                                           "Academic Terms"
+                                                                       ],
+                                                              "summary":  "Create term (Admin/Staff)",
+                                                              "security":  [
+                                                                               {
+                                                                                   "sanctum":  [
+
+                                                                                               ]
+                                                                               }
+                                                                           ],
+                                                              "requestBody":  {
+                                                                                  "$ref":  "#/components/requestBodies/Term"
+                                                                              },
+                                                              "responses":  {
+                                                                                "201":  {
+                                                                                            "$ref":  "#/components/responses/Success"
+                                                                                        },
+                                                                                "422":  {
+                                                                                            "$ref":  "#/components/responses/Validation"
+                                                                                        }
+                                                                            }
+                                                          }
+                                             },
+                  "/api/v1/academic-terms/{id}":  {
+                                                      "$ref":  "#/components/pathItems/TermById"
+                                                  },
+                  "/api/v1/course-offerings":  {
+                                                   "get":  {
+                                                               "tags":  [
+                                                                            "Course Offerings"
+                                                                        ],
+                                                               "summary":  "List offerings (Admin/Staff)",
+                                                               "security":  [
+                                                                                {
+                                                                                    "sanctum":  [
+
+                                                                                                ]
+                                                                                }
+                                                                            ],
+                                                               "responses":  {
+                                                                                 "200":  {
+                                                                                             "$ref":  "#/components/responses/Paginated"
+                                                                                         }
+                                                                             }
+                                                           },
+                                                   "post":  {
+                                                                "tags":  [
+                                                                             "Course Offerings"
+                                                                         ],
+                                                                "summary":  "Create offering (Admin/Staff)",
+                                                                "security":  [
+                                                                                 {
+                                                                                     "sanctum":  [
+
+                                                                                                 ]
+                                                                                 }
+                                                                             ],
+                                                                "requestBody":  {
+                                                                                    "$ref":  "#/components/requestBodies/Offering"
+                                                                                },
+                                                                "responses":  {
+                                                                                  "201":  {
+                                                                                              "$ref":  "#/components/responses/Success"
+                                                                                          },
+                                                                                  "422":  {
+                                                                                              "$ref":  "#/components/responses/Validation"
+                                                                                          }
+                                                                              }
+                                                            }
+                                               },
+                  "/api/v1/course-offerings/{id}":  {
+                                                        "$ref":  "#/components/pathItems/OfferingById"
+                                                    },
+                  "/api/v1/enrollments":  {
+                                              "get":  {
+                                                          "tags":  [
+                                                                       "Enrollments"
+                                                                   ],
+                                                          "summary":  "List enrollments (Admin/Staff)",
+                                                          "security":  [
+                                                                           {
+                                                                               "sanctum":  [
+
+                                                                                           ]
+                                                                           }
+                                                                       ],
+                                                          "responses":  {
+                                                                            "200":  {
+                                                                                        "$ref":  "#/components/responses/Paginated"
+                                                                                    }
+                                                                        }
+                                                      },
+                                              "post":  {
+                                                           "tags":  [
+                                                                        "Enrollments"
+                                                                    ],
+                                                           "summary":  "Create enrollment (Admin/Staff)",
+                                                           "security":  [
+                                                                            {
+                                                                                "sanctum":  [
+
+                                                                                            ]
+                                                                            }
+                                                                        ],
+                                                           "requestBody":  {
+                                                                               "$ref":  "#/components/requestBodies/Enrollment"
+                                                                           },
+                                                           "responses":  {
+                                                                             "201":  {
+                                                                                         "$ref":  "#/components/responses/Success"
+                                                                                     },
+                                                                             "409":  {
+                                                                                         "$ref":  "#/components/responses/Conflict"
+                                                                                     },
+                                                                             "422":  {
+                                                                                         "$ref":  "#/components/responses/Validation"
+                                                                                     }
+                                                                         }
+                                                       }
+                                          },
+                  "/api/v1/enrollments/{id}":  {
+                                                   "$ref":  "#/components/pathItems/EnrollmentById"
+                                               },
+                  "/api/v1/grades":  {
+                                         "get":  {
+                                                     "tags":  [
+                                                                  "Grades"
+                                                              ],
+                                                     "summary":  "List grades (Admin/Staff)",
+                                                     "security":  [
+                                                                      {
+                                                                          "sanctum":  [
+
+                                                                                      ]
+                                                                      }
+                                                                  ],
+                                                     "responses":  {
+                                                                       "200":  {
+                                                                                   "$ref":  "#/components/responses/Paginated"
+                                                                               }
+                                                                   }
+                                                 },
+                                         "post":  {
+                                                      "tags":  [
+                                                                   "Grades"
+                                                               ],
+                                                      "summary":  "Create grade (Admin/Staff)",
+                                                      "security":  [
+                                                                       {
+                                                                           "sanctum":  [
+
+                                                                                       ]
+                                                                       }
+                                                                   ],
+                                                      "requestBody":  {
+                                                                          "$ref":  "#/components/requestBodies/Grade"
+                                                                      },
+                                                      "responses":  {
+                                                                        "201":  {
+                                                                                    "$ref":  "#/components/responses/Success"
+                                                                                },
+                                                                        "422":  {
+                                                                                    "$ref":  "#/components/responses/Validation"
+                                                                                }
+                                                                    }
+                                                  }
+                                     },
+                  "/api/v1/grades/{id}":  {
+                                              "parameters":  [
+                                                                 {
+                                                                     "$ref":  "#/components/parameters/Id"
+                                                                 }
+                                                             ],
+                                              "get":  {
+                                                          "tags":  [
+                                                                       "Grades"
+                                                                   ],
+                                                          "summary":  "Get grade (Admin/Staff)",
+                                                          "security":  [
+                                                                           {
+                                                                               "sanctum":  [
+
+                                                                                           ]
+                                                                           }
+                                                                       ],
+                                                          "responses":  {
+                                                                            "200":  {
+                                                                                        "$ref":  "#/components/responses/Success"
+                                                                                    },
+                                                                            "404":  {
+                                                                                        "$ref":  "#/components/responses/NotFound"
+                                                                                    }
+                                                                        }
+                                                      },
+                                              "put":  {
+                                                          "tags":  [
+                                                                       "Grades"
+                                                                   ],
+                                                          "summary":  "Update grade (Admin/Staff)",
+                                                          "security":  [
+                                                                           {
+                                                                               "sanctum":  [
+
+                                                                                           ]
+                                                                           }
+                                                                       ],
+                                                          "requestBody":  {
+                                                                              "$ref":  "#/components/requestBodies/Grade"
+                                                                          },
+                                                          "responses":  {
+                                                                            "200":  {
+                                                                                        "$ref":  "#/components/responses/Success"
+                                                                                    },
+                                                                            "422":  {
+                                                                                        "$ref":  "#/components/responses/Validation"
+                                                                                    }
+                                                                        }
+                                                      }
+                                          },
+                  "/api/v1/my/student":  {
+                                             "get":  {
+                                                         "tags":  [
+                                                                      "Self-service"
+                                                                  ],
+                                                         "summary":  "Linked student profile (Student only)",
+                                                         "security":  [
+                                                                          {
+                                                                              "sanctum":  [
+
+                                                                                          ]
+                                                                          }
+                                                                      ],
+                                                         "responses":  {
+                                                                           "200":  {
+                                                                                       "$ref":  "#/components/responses/Success"
+                                                                                   },
+                                                                           "403":  {
+                                                                                       "$ref":  "#/components/responses/Forbidden"
+                                                                                   }
+                                                                       }
+                                                     }
+                                         },
+                  "/api/v1/my/enrollments":  {
+                                                 "get":  {
+                                                             "tags":  [
+                                                                          "Self-service"
+                                                                      ],
+                                                             "summary":  "Own enrollments (Student only)",
+                                                             "security":  [
+                                                                              {
+                                                                                  "sanctum":  [
+
+                                                                                              ]
+                                                                              }
+                                                                          ],
+                                                             "responses":  {
+                                                                               "200":  {
+                                                                                           "$ref":  "#/components/responses/Paginated"
+                                                                                       },
+                                                                               "403":  {
+                                                                                           "$ref":  "#/components/responses/Forbidden"
+                                                                                       }
+                                                                           }
+                                                         }
+                                             },
+                  "/api/v1/my/grades":  {
+                                            "get":  {
+                                                        "tags":  [
+                                                                     "Self-service"
+                                                                 ],
+                                                        "summary":  "Own grades (Student only)",
+                                                        "security":  [
+                                                                         {
+                                                                             "sanctum":  [
+
+                                                                                         ]
+                                                                         }
+                                                                     ],
+                                                        "responses":  {
+                                                                          "200":  {
+                                                                                      "$ref":  "#/components/responses/Paginated"
+                                                                                  },
+                                                                          "403":  {
+                                                                                      "$ref":  "#/components/responses/Forbidden"
+                                                                                  }
+                                                                      }
+                                                    },
+                                            "post":  {
+                                                         "tags":  [
+                                                                      "Instructor"
+                                                                  ],
+                                                         "summary":  "Submit grade for assigned offering (Instructor only)",
+                                                         "security":  [
+                                                                          {
+                                                                              "sanctum":  [
+
+                                                                                          ]
+                                                                          }
+                                                                      ],
+                                                         "requestBody":  {
+                                                                             "$ref":  "#/components/requestBodies/Grade"
+                                                                         },
+                                                         "responses":  {
+                                                                           "201":  {
+                                                                                       "$ref":  "#/components/responses/Success"
+                                                                                   },
+                                                                           "403":  {
+                                                                                       "$ref":  "#/components/responses/Forbidden"
+                                                                                   },
+                                                                           "422":  {
+                                                                                       "$ref":  "#/components/responses/Validation"
+                                                                                   },
+                                                                           "409":  {
+                                                                                       "$ref":  "#/components/responses/Conflict"
+                                                                                   }
+                                                                       }
+                                                     }
+                                        },
+                  "/api/v1/my/grades/{id}":  {
+                                                 "put":  {
+                                                             "tags":  [
+                                                                          "Instructor"
+                                                                      ],
+                                                             "summary":  "Update grade for assigned offering (Instructor only)",
+                                                             "security":  [
+                                                                              {
+                                                                                  "sanctum":  [
+
+                                                                                              ]
+                                                                              }
+                                                                          ],
+                                                             "parameters":  [
+                                                                                {
+                                                                                    "$ref":  "#/components/parameters/Id"
+                                                                                }
+                                                                            ],
+                                                             "requestBody":  {
+                                                                                 "$ref":  "#/components/requestBodies/GradeUpdate"
+                                                                             },
+                                                             "responses":  {
+                                                                               "200":  {
+                                                                                           "$ref":  "#/components/responses/Success"
+                                                                                       },
+                                                                               "403":  {
+                                                                                           "$ref":  "#/components/responses/Forbidden"
+                                                                                       },
+                                                                               "404":  {
+                                                                                           "$ref":  "#/components/responses/NotFound"
+                                                                                       },
+                                                                               "422":  {
+                                                                                           "$ref":  "#/components/responses/Validation"
+                                                                                       }
+                                                                           }
+                                                         }
+                                             },
+                  "/api/v1/my/course-offerings":  {
+                                                      "get":  {
+                                                                  "tags":  [
+                                                                               "Instructor"
+                                                                           ],
+                                                                  "summary":  "Assigned offerings (Instructor only)",
+                                                                  "security":  [
+                                                                                   {
+                                                                                       "sanctum":  [
+
+                                                                                                   ]
+                                                                                   }
+                                                                               ],
+                                                                  "responses":  {
+                                                                                    "200":  {
+                                                                                                "$ref":  "#/components/responses/Paginated"
+                                                                                            },
+                                                                                    "403":  {
+                                                                                                "$ref":  "#/components/responses/Forbidden"
+                                                                                            }
+                                                                                }
+                                                              }
+                                                  },
+                  "/api/v1/instructors":  {
+                                              "get":  {
+                                                          "summary":  "List active Instructor accounts for assignment (Admin/Staff)",
+                                                          "tags":  [
+                                                                       "Course Offerings"
+                                                                   ],
+                                                          "security":  [
+                                                                           {
+                                                                               "sanctum":  [
+
+                                                                                           ]
+                                                                           }
+                                                                       ],
+                                                          "responses":  {
+                                                                            "401":  {
+                                                                                        "$ref":  "#/components/responses/Unauthenticated"
+                                                                                    },
+                                                                            "403":  {
+                                                                                        "$ref":  "#/components/responses/Forbidden"
+                                                                                    },
+                                                                            "200":  {
+                                                                                        "content":  {
+                                                                                                        "application/json":  {
+                                                                                                                                 "schema":  {
+                                                                                                                                                "properties":  {
+                                                                                                                                                                   "success":  {
+                                                                                                                                                                                   "type":  "boolean"
+                                                                                                                                                                               },
+                                                                                                                                                                   "data":  {
+                                                                                                                                                                                "items":  {
+                                                                                                                                                                                              "properties":  {
+                                                                                                                                                                                                                 "email":  {
+                                                                                                                                                                                                                               "type":  "string",
+                                                                                                                                                                                                                               "format":  "email"
+                                                                                                                                                                                                                           },
+                                                                                                                                                                                                                 "role_id":  {
+                                                                                                                                                                                                                                 "type":  "integer"
+                                                                                                                                                                                                                             },
+                                                                                                                                                                                                                 "name":  {
+                                                                                                                                                                                                                              "type":  "string"
+                                                                                                                                                                                                                          },
+                                                                                                                                                                                                                 "id":  {
+                                                                                                                                                                                                                            "type":  "integer"
+                                                                                                                                                                                                                        }
+                                                                                                                                                                                                             },
+                                                                                                                                                                                              "type":  "object"
+                                                                                                                                                                                          },
+                                                                                                                                                                                "type":  "array"
+                                                                                                                                                                            }
+                                                                                                                                                               },
+                                                                                                                                                "type":  "object"
+                                                                                                                                            }
+                                                                                                                             }
+                                                                                                    },
+                                                                                        "description":  "Active Instructor accounts available for Course Offering assignment."
+                                                                                    }
+                                                                        }
+                                                      }
+                                          },
+                  "/api/v1/my/teaching-enrollments":  {
+                                                          "get":  {
+                                                                      "summary":  "List enrollments for the authenticated Instructor\u0027s assigned offerings",
+                                                                      "tags":  [
+                                                                                   "Instructor"
+                                                                               ],
+                                                                      "security":  [
+                                                                                       {
+                                                                                           "sanctum":  [
+
+                                                                                                       ]
+                                                                                       }
+                                                                                   ],
+                                                                      "responses":  {
+                                                                                        "401":  {
+                                                                                                    "$ref":  "#/components/responses/Unauthenticated"
+                                                                                                },
+                                                                                        "403":  {
+                                                                                                    "$ref":  "#/components/responses/Forbidden"
+                                                                                                },
+                                                                                        "200":  {
+                                                                                                    "$ref":  "#/components/responses/Paginated"
+                                                                                                }
+                                                                                    },
+                                                                      "parameters":  [
+                                                                                         {
+                                                                                             "$ref":  "#/components/parameters/Page"
+                                                                                         },
+                                                                                         {
+                                                                                             "$ref":  "#/components/parameters/PerPage"
+                                                                                         }
+                                                                                     ]
+                                                                  }
+                                                      }
+              },
+    "components":  {
+                       "securitySchemes":  {
+                                               "sanctum":  {
+                                                               "type":  "http",
+                                                               "scheme":  "bearer",
+                                                               "bearerFormat":  "Sanctum token"
+                                                           }
+                                           },
+                       "parameters":  {
+                                          "Id":  {
+                                                     "name":  "id",
+                                                     "in":  "path",
+                                                     "required":  true,
+                                                     "schema":  {
+                                                                    "type":  "integer"
+                                                                }
+                                                 },
+                                          "Search":  {
+                                                         "name":  "search",
+                                                         "in":  "query",
+                                                         "schema":  {
+                                                                        "type":  "string"
+                                                                    }
+                                                     },
+                                          "ProgramId":  {
+                                                            "name":  "program_id",
+                                                            "in":  "query",
+                                                            "schema":  {
+                                                                           "type":  "integer"
+                                                                       }
+                                                        },
+                                          "YearLevel":  {
+                                                            "name":  "year_level",
+                                                            "in":  "query",
+                                                            "schema":  {
+                                                                           "type":  "integer",
+                                                                           "minimum":  1,
+                                                                           "maximum":  6
+                                                                       }
+                                                        },
+                                          "StudentStatus":  {
+                                                                "name":  "status",
+                                                                "in":  "query",
+                                                                "schema":  {
+                                                                               "type":  "string",
+                                                                               "enum":  [
+                                                                                            "Regular",
+                                                                                            "Irregular",
+                                                                                            "Graduated",
+                                                                                            "Inactive"
+                                                                                        ]
+                                                                           }
+                                                            },
+                                          "Sort":  {
+                                                       "name":  "sort",
+                                                       "in":  "query",
+                                                       "schema":  {
+                                                                      "type":  "string",
+                                                                      "enum":  [
+                                                                                   "student_number",
+                                                                                   "first_name",
+                                                                                   "middle_name",
+                                                                                   "last_name",
+                                                                                   "email",
+                                                                                   "year_level",
+                                                                                   "status",
+                                                                                   "created_at"
+                                                                               ]
+                                                                  }
+                                                   },
+                                          "Direction":  {
+                                                            "name":  "direction",
+                                                            "in":  "query",
+                                                            "schema":  {
+                                                                           "type":  "string",
+                                                                           "enum":  [
+                                                                                        "asc",
+                                                                                        "desc"
+                                                                                    ]
+                                                                       }
+                                                        },
+                                          "Page":  {
+                                                       "name":  "page",
+                                                       "in":  "query",
+                                                       "schema":  {
+                                                                      "type":  "integer",
+                                                                      "minimum":  1
+                                                                  }
+                                                   },
+                                          "PerPage":  {
+                                                          "name":  "per_page",
+                                                          "in":  "query",
+                                                          "schema":  {
+                                                                         "type":  "integer",
+                                                                         "minimum":  1,
+                                                                         "maximum":  100
+                                                                     }
+                                                      }
+                                      },
+                       "requestBodies":  {
+                                             "Student":  {
+                                                             "required":  true,
+                                                             "content":  {
+                                                                             "application/json":  {
+                                                                                                      "schema":  {
+                                                                                                                     "$ref":  "#/components/schemas/StudentInput"
+                                                                                                                 },
+                                                                                                      "example":  {
+                                                                                                                      "student_number":  "2026-00101",
+                                                                                                                      "first_name":  "Juan",
+                                                                                                                      "last_name":  "Dela Cruz",
+                                                                                                                      "email":  "juan@example.test",
+                                                                                                                      "program_id":  1,
+                                                                                                                      "year_level":  2,
+                                                                                                                      "status":  "Regular"
+                                                                                                                  }
+                                                                                                  }
+                                                                         }
+                                                         },
+                                             "Program":  {
+                                                             "required":  true,
+                                                             "content":  {
+                                                                             "application/json":  {
+                                                                                                      "schema":  {
+                                                                                                                     "$ref":  "#/components/schemas/ProgramInput"
+                                                                                                                 }
+                                                                                                  }
+                                                                         }
+                                                         },
+                                             "Course":  {
+                                                            "required":  true,
+                                                            "content":  {
+                                                                            "application/json":  {
+                                                                                                     "schema":  {
+                                                                                                                    "$ref":  "#/components/schemas/CourseInput"
+                                                                                                                }
+                                                                                                 }
+                                                                        }
+                                                        },
+                                             "Term":  {
+                                                          "required":  true,
+                                                          "content":  {
+                                                                          "application/json":  {
+                                                                                                   "schema":  {
+                                                                                                                  "$ref":  "#/components/schemas/TermInput"
+                                                                                                              }
+                                                                                               }
+                                                                      }
+                                                      },
+                                             "Offering":  {
+                                                              "required":  true,
+                                                              "content":  {
+                                                                              "application/json":  {
+                                                                                                       "schema":  {
+                                                                                                                      "$ref":  "#/components/schemas/OfferingInput"
+                                                                                                                  }
+                                                                                                   }
+                                                                          }
+                                                          },
+                                             "Enrollment":  {
+                                                                "required":  true,
+                                                                "content":  {
+                                                                                "application/json":  {
+                                                                                                         "schema":  {
+                                                                                                                        "$ref":  "#/components/schemas/EnrollmentInput"
+                                                                                                                    },
+                                                                                                         "example":  {
+                                                                                                                         "student_id":  1,
+                                                                                                                         "course_offering_id":  1,
+                                                                                                                         "enrollment_date":  "2026-08-01",
+                                                                                                                         "status":  "Enrolled"
+                                                                                                                     }
+                                                                                                     }
+                                                                            }
+                                                            },
+                                             "Grade":  {
+                                                           "required":  true,
+                                                           "content":  {
+                                                                           "application/json":  {
+                                                                                                    "schema":  {
+                                                                                                                   "$ref":  "#/components/schemas/GradeInput"
+                                                                                                               }
+                                                                                                }
+                                                                       }
+                                                       },
+                                             "GradeUpdate":  {
+                                                                 "required":  true,
+                                                                 "content":  {
+                                                                                 "application/json":  {
+                                                                                                          "schema":  {
+                                                                                                                         "type":  "object",
+                                                                                                                         "properties":  {
+                                                                                                                                            "grade":  {
+                                                                                                                                                          "type":  "number"
+                                                                                                                                                      },
+                                                                                                                                            "remarks":  {
+                                                                                                                                                            "type":  "string"
+                                                                                                                                                        }
+                                                                                                                                        }
+                                                                                                                     }
+                                                                                                      }
+                                                                             }
+                                                             }
+                                         },
+                       "schemas":  {
+                                       "LoginInput":  {
+                                                          "type":  "object",
+                                                          "required":  [
+                                                                           "email",
+                                                                           "password"
+                                                                       ],
+                                                          "properties":  {
+                                                                             "email":  {
+                                                                                           "type":  "string",
+                                                                                           "format":  "email"
+                                                                                       },
+                                                                             "password":  {
+                                                                                              "type":  "string"
+                                                                                          }
+                                                                         }
+                                                      },
+                                       "TokenResponse":  {
+                                                             "type":  "object",
+                                                             "properties":  {
+                                                                                "success":  {
+                                                                                                "type":  "boolean",
+                                                                                                "example":  true
+                                                                                            },
+                                                                                "data":  {
+                                                                                             "type":  "object",
+                                                                                             "properties":  {
+                                                                                                                "token":  {
+                                                                                                                              "type":  "string",
+                                                                                                                              "example":  "1|example-token"
+                                                                                                                          },
+                                                                                                                "user":  {
+                                                                                                                             "type":  "object"
+                                                                                                                         }
+                                                                                                            }
+                                                                                         }
+                                                                            }
+                                                         },
+                                       "StudentInput":  {
+                                                            "type":  "object",
+                                                            "required":  [
+                                                                             "student_number",
+                                                                             "first_name",
+                                                                             "last_name",
+                                                                             "program_id",
+                                                                             "year_level",
+                                                                             "status"
+                                                                         ],
+                                                            "properties":  {
+                                                                               "student_number":  {
+                                                                                                      "type":  "string"
+                                                                                                  },
+                                                                               "first_name":  {
+                                                                                                  "type":  "string"
+                                                                                              },
+                                                                               "middle_name":  {
+                                                                                                   "type":  "string",
+                                                                                                   "nullable":  true
+                                                                                               },
+                                                                               "last_name":  {
+                                                                                                 "type":  "string"
+                                                                                             },
+                                                                               "email":  {
+                                                                                             "type":  "string",
+                                                                                             "format":  "email",
+                                                                                             "nullable":  true
+                                                                                         },
+                                                                               "program_id":  {
+                                                                                                  "type":  "integer"
+                                                                                              },
+                                                                               "year_level":  {
+                                                                                                  "type":  "integer",
+                                                                                                  "minimum":  1,
+                                                                                                  "maximum":  6
+                                                                                              },
+                                                                               "status":  {
+                                                                                              "type":  "string",
+                                                                                              "enum":  [
+                                                                                                           "Regular",
+                                                                                                           "Irregular",
+                                                                                                           "Graduated",
+                                                                                                           "Inactive"
+                                                                                                       ]
+                                                                                          },
+                                                                               "contact_number":  {
+                                                                                                      "type":  "string"
+                                                                                                  },
+                                                                               "address":  {
+                                                                                               "type":  "string"
+                                                                                           }
+                                                                           }
+                                                        },
+                                       "ProgramInput":  {
+                                                            "type":  "object",
+                                                            "required":  [
+                                                                             "code",
+                                                                             "name",
+                                                                             "status"
+                                                                         ],
+                                                            "properties":  {
+                                                                               "code":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                               "name":  {
+                                                                                            "type":  "string"
+                                                                                        },
+                                                                               "description":  {
+                                                                                                   "type":  "string",
+                                                                                                   "nullable":  true
+                                                                                               },
+                                                                               "status":  {
+                                                                                              "type":  "string",
+                                                                                              "enum":  [
+                                                                                                           "Active",
+                                                                                                           "Inactive"
+                                                                                                       ]
+                                                                                          }
+                                                                           }
+                                                        },
+                                       "CourseInput":  {
+                                                           "type":  "object",
+                                                           "required":  [
+                                                                            "course_code",
+                                                                            "course_title",
+                                                                            "units",
+                                                                            "status"
+                                                                        ],
+                                                           "properties":  {
+                                                                              "course_code":  {
+                                                                                                  "type":  "string"
+                                                                                              },
+                                                                              "course_title":  {
+                                                                                                   "type":  "string"
+                                                                                               },
+                                                                              "units":  {
+                                                                                            "type":  "integer",
+                                                                                            "minimum":  1,
+                                                                                            "maximum":  10
+                                                                                        },
+                                                                              "description":  {
+                                                                                                  "type":  "string",
+                                                                                                  "nullable":  true
+                                                                                              },
+                                                                              "status":  {
+                                                                                             "type":  "string",
+                                                                                             "enum":  [
+                                                                                                          "Active",
+                                                                                                          "Inactive"
+                                                                                                      ]
+                                                                                         }
+                                                                          }
+                                                       },
+                                       "TermInput":  {
+                                                         "type":  "object",
+                                                         "required":  [
+                                                                          "academic_year",
+                                                                          "semester",
+                                                                          "start_date",
+                                                                          "end_date",
+                                                                          "status"
+                                                                      ],
+                                                         "properties":  {
+                                                                            "academic_year":  {
+                                                                                                  "type":  "string"
+                                                                                              },
+                                                                            "semester":  {
+                                                                                             "type":  "string"
+                                                                                         },
+                                                                            "start_date":  {
+                                                                                               "type":  "string",
+                                                                                               "format":  "date"
+                                                                                           },
+                                                                            "end_date":  {
+                                                                                             "type":  "string",
+                                                                                             "format":  "date"
+                                                                                         },
+                                                                            "status":  {
+                                                                                           "type":  "string",
+                                                                                           "enum":  [
+                                                                                                        "Active",
+                                                                                                        "Inactive"
+                                                                                                    ]
+                                                                                       }
+                                                                        }
+                                                     },
+                                       "OfferingInput":  {
+                                                             "type":  "object",
+                                                             "required":  [
+                                                                              "course_id",
+                                                                              "academic_term_id",
+                                                                              "section",
+                                                                              "capacity",
+                                                                              "status"
+                                                                          ],
+                                                             "properties":  {
+                                                                                "course_id":  {
+                                                                                                  "type":  "integer"
+                                                                                              },
+                                                                                "academic_term_id":  {
+                                                                                                         "type":  "integer"
+                                                                                                     },
+                                                                                "instructor_id":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "nullable":  true,
+                                                                                                      "description":  "Optional. When provided, must reference an existing user whose role is Instructor."
+                                                                                                  },
+                                                                                "section":  {
+                                                                                                "type":  "string"
+                                                                                            },
+                                                                                "capacity":  {
+                                                                                                 "type":  "integer",
+                                                                                                 "minimum":  1
+                                                                                             },
+                                                                                "status":  {
+                                                                                               "type":  "string",
+                                                                                               "enum":  [
+                                                                                                            "Active",
+                                                                                                            "Inactive"
+                                                                                                        ]
+                                                                                           },
+                                                                                "schedule":  {
+                                                                                                 "type":  "string",
+                                                                                                 "nullable":  true
+                                                                                             },
+                                                                                "room":  {
+                                                                                             "type":  "string",
+                                                                                             "nullable":  true
+                                                                                         }
+                                                                            }
+                                                         },
+                                       "EnrollmentInput":  {
+                                                               "type":  "object",
+                                                               "required":  [
+                                                                                "student_id",
+                                                                                "course_offering_id",
+                                                                                "enrollment_date",
+                                                                                "status"
+                                                                            ],
+                                                               "properties":  {
+                                                                                  "student_id":  {
+                                                                                                     "type":  "integer"
+                                                                                                 },
+                                                                                  "course_offering_id":  {
+                                                                                                             "type":  "integer"
+                                                                                                         },
+                                                                                  "enrollment_date":  {
+                                                                                                          "type":  "string",
+                                                                                                          "format":  "date"
+                                                                                                      },
+                                                                                  "status":  {
+                                                                                                 "type":  "string",
+                                                                                                 "enum":  [
+                                                                                                              "Enrolled",
+                                                                                                              "Dropped",
+                                                                                                              "Completed"
+                                                                                                          ]
+                                                                                             }
+                                                                              }
+                                                           },
+                                       "GradeInput":  {
+                                                          "type":  "object",
+                                                          "required":  [
+                                                                           "enrollment_id"
+                                                                       ],
+                                                          "properties":  {
+                                                                             "enrollment_id":  {
+                                                                                                   "type":  "integer"
+                                                                                               },
+                                                                             "grade":  {
+                                                                                           "type":  "number",
+                                                                                           "minimum":  0,
+                                                                                           "maximum":  100,
+                                                                                           "nullable":  true
+                                                                                       },
+                                                                             "remarks":  {
+                                                                                             "type":  "string",
+                                                                                             "nullable":  true
+                                                                                         }
+                                                                         }
+                                                      }
+                                   },
+                       "responses":  {
+                                         "Success":  {
+                                                         "description":  "Successful JSON response",
+                                                         "content":  {
+                                                                         "application/json":  {
+                                                                                                  "example":  {
+                                                                                                                  "success":  true,
+                                                                                                                  "data":  {
+                                                                                                                               "id":  1
+                                                                                                                           }
+                                                                                                              }
+                                                                                              }
+                                                                     }
+                                                     },
+                                         "Paginated":  {
+                                                           "description":  "Paginated JSON response",
+                                                           "content":  {
+                                                                           "application/json":  {
+                                                                                                    "example":  {
+                                                                                                                    "success":  true,
+                                                                                                                    "data":  {
+                                                                                                                                 "current_page":  1,
+                                                                                                                                 "data":  [
+
+                                                                                                                                          ],
+                                                                                                                                 "per_page":  20,
+                                                                                                                                 "total":  0
+                                                                                                                             }
+                                                                                                                }
+                                                                                                }
+                                                                       }
+                                                       },
+                                         "Validation":  {
+                                                            "description":  "Validation error (422)"
+                                                        },
+                                         "Unauthenticated":  {
+                                                                 "description":  "Unauthenticated (401)",
+                                                                 "content":  {
+                                                                                 "application/json":  {
+                                                                                                          "example":  {
+                                                                                                                          "success":  false,
+                                                                                                                          "message":  "Unauthenticated."
+                                                                                                                      }
+                                                                                                      }
+                                                                             }
+                                                             },
+                                         "Forbidden":  {
+                                                           "description":  "Forbidden (403)",
+                                                           "content":  {
+                                                                           "application/json":  {
+                                                                                                    "example":  {
+                                                                                                                    "success":  false,
+                                                                                                                    "message":  "Forbidden."
+                                                                                                                }
+                                                                                                }
+                                                                       }
+                                                       },
+                                         "NotFound":  {
+                                                          "description":  "Resource not found (404)",
+                                                          "content":  {
+                                                                          "application/json":  {
+                                                                                                   "example":  {
+                                                                                                                   "success":  false,
+                                                                                                                   "message":  "Resource not found."
+                                                                                                               }
+                                                                                               }
+                                                                      }
+                                                      },
+                                         "Conflict":  {
+                                                          "description":  "Duplicate/conflict (409)",
+                                                          "content":  {
+                                                                          "application/json":  {
+                                                                                                   "example":  {
+                                                                                                                   "success":  false,
+                                                                                                                   "message":  "Duplicate or conflicting record."
+                                                                                                               }
+                                                                                               }
+                                                                      }
+                                                      }
+                                     },
+                       "pathItems":  {
+                                         "TermById":  {
+                                                          "parameters":  [
+                                                                             {
+                                                                                 "$ref":  "#/components/parameters/Id"
+                                                                             }
+                                                                         ],
+                                                          "get":  {
+                                                                      "tags":  [
+                                                                                   "Academic Terms"
+                                                                               ],
+                                                                      "summary":  "Get term (Admin/Staff)",
+                                                                      "security":  [
+                                                                                       {
+                                                                                           "sanctum":  [
+
+                                                                                                       ]
+                                                                                       }
+                                                                                   ],
+                                                                      "responses":  {
+                                                                                        "200":  {
+                                                                                                    "$ref":  "#/components/responses/Success"
+                                                                                                },
+                                                                                        "404":  {
+                                                                                                    "$ref":  "#/components/responses/NotFound"
+                                                                                                }
+                                                                                    }
+                                                                  },
+                                                          "put":  {
+                                                                      "tags":  [
+                                                                                   "Academic Terms"
+                                                                               ],
+                                                                      "summary":  "Update term (Admin/Staff)",
+                                                                      "security":  [
+                                                                                       {
+                                                                                           "sanctum":  [
+
+                                                                                                       ]
+                                                                                       }
+                                                                                   ],
+                                                                      "requestBody":  {
+                                                                                          "$ref":  "#/components/requestBodies/Term"
+                                                                                      },
+                                                                      "responses":  {
+                                                                                        "200":  {
+                                                                                                    "$ref":  "#/components/responses/Success"
+                                                                                                },
+                                                                                        "422":  {
+                                                                                                    "$ref":  "#/components/responses/Validation"
+                                                                                                }
+                                                                                    }
+                                                                  },
+                                                          "delete":  {
+                                                                         "tags":  [
+                                                                                      "Academic Terms"
+                                                                                  ],
+                                                                         "summary":  "Delete term (Admin/Staff)",
+                                                                         "security":  [
+                                                                                          {
+                                                                                              "sanctum":  [
+
+                                                                                                          ]
+                                                                                          }
+                                                                                      ],
+                                                                         "responses":  {
+                                                                                           "204":  {
+                                                                                                       "description":  "Deleted"
+                                                                                                   }
+                                                                                       }
+                                                                     }
+                                                      },
+                                         "OfferingById":  {
+                                                              "parameters":  [
+                                                                                 {
+                                                                                     "$ref":  "#/components/parameters/Id"
+                                                                                 }
+                                                                             ],
+                                                              "get":  {
+                                                                          "tags":  [
+                                                                                       "Course Offerings"
+                                                                                   ],
+                                                                          "summary":  "Get offering (Admin/Staff)",
+                                                                          "security":  [
+                                                                                           {
+                                                                                               "sanctum":  [
+
+                                                                                                           ]
+                                                                                           }
+                                                                                       ],
+                                                                          "responses":  {
+                                                                                            "200":  {
+                                                                                                        "$ref":  "#/components/responses/Success"
+                                                                                                    },
+                                                                                            "404":  {
+                                                                                                        "$ref":  "#/components/responses/NotFound"
+                                                                                                    }
+                                                                                        }
+                                                                      },
+                                                              "put":  {
+                                                                          "tags":  [
+                                                                                       "Course Offerings"
+                                                                                   ],
+                                                                          "summary":  "Update offering (Admin/Staff)",
+                                                                          "security":  [
+                                                                                           {
+                                                                                               "sanctum":  [
+
+                                                                                                           ]
+                                                                                           }
+                                                                                       ],
+                                                                          "requestBody":  {
+                                                                                              "$ref":  "#/components/requestBodies/Offering"
+                                                                                          },
+                                                                          "responses":  {
+                                                                                            "200":  {
+                                                                                                        "$ref":  "#/components/responses/Success"
+                                                                                                    },
+                                                                                            "422":  {
+                                                                                                        "$ref":  "#/components/responses/Validation"
+                                                                                                    }
+                                                                                        }
+                                                                      },
+                                                              "delete":  {
+                                                                             "tags":  [
+                                                                                          "Course Offerings"
+                                                                                      ],
+                                                                             "summary":  "Delete offering (Admin/Staff)",
+                                                                             "security":  [
+                                                                                              {
+                                                                                                  "sanctum":  [
+
+                                                                                                              ]
+                                                                                              }
+                                                                                          ],
+                                                                             "responses":  {
+                                                                                               "204":  {
+                                                                                                           "description":  "Deleted"
+                                                                                                       }
+                                                                                           }
+                                                                         }
+                                                          },
+                                         "EnrollmentById":  {
+                                                                "parameters":  [
+                                                                                   {
+                                                                                       "$ref":  "#/components/parameters/Id"
+                                                                                   }
+                                                                               ],
+                                                                "get":  {
+                                                                            "tags":  [
+                                                                                         "Enrollments"
+                                                                                     ],
+                                                                            "summary":  "Get enrollment (Admin/Staff)",
+                                                                            "security":  [
+                                                                                             {
+                                                                                                 "sanctum":  [
+
+                                                                                                             ]
+                                                                                             }
+                                                                                         ],
+                                                                            "responses":  {
+                                                                                              "200":  {
+                                                                                                          "$ref":  "#/components/responses/Success"
+                                                                                                      },
+                                                                                              "404":  {
+                                                                                                          "$ref":  "#/components/responses/NotFound"
+                                                                                                      }
+                                                                                          }
+                                                                        },
+                                                                "put":  {
+                                                                            "tags":  [
+                                                                                         "Enrollments"
+                                                                                     ],
+                                                                            "summary":  "Update enrollment (Admin/Staff)",
+                                                                            "security":  [
+                                                                                             {
+                                                                                                 "sanctum":  [
+
+                                                                                                             ]
+                                                                                             }
+                                                                                         ],
+                                                                            "requestBody":  {
+                                                                                                "$ref":  "#/components/requestBodies/Enrollment"
+                                                                                            },
+                                                                            "responses":  {
+                                                                                              "200":  {
+                                                                                                          "$ref":  "#/components/responses/Success"
+                                                                                                      },
+                                                                                              "422":  {
+                                                                                                          "$ref":  "#/components/responses/Validation"
+                                                                                                      }
+                                                                                          }
+                                                                        },
+                                                                "delete":  {
+                                                                               "tags":  [
+                                                                                            "Enrollments"
+                                                                                        ],
+                                                                               "summary":  "Delete enrollment (Admin/Staff)",
+                                                                               "security":  [
+                                                                                                {
+                                                                                                    "sanctum":  [
+
+                                                                                                                ]
+                                                                                                }
+                                                                                            ],
+                                                                               "responses":  {
+                                                                                                 "204":  {
+                                                                                                             "description":  "Deleted"
+                                                                                                         }
+                                                                                             }
+                                                                           }
+                                                            }
+                                     }
+                   }
+}

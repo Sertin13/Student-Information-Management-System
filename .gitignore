@@ -1,0 +1,26 @@
+.worktrees/
+.superpowers/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+!.env.*.example
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.*.example
+auth.json
+
+# Installed dependencies and generated frontend output
+/backend/vendor/
+/frontend/node_modules/
+/frontend/dist/
+**/node_modules/
+**/vendor/
+**/dist/
+
+# Logs and runtime-generated files
+*.log
+/backend/storage/logs/*
+/backend/bootstrap/cache/*.php

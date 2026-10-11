@@ -1,0 +1,211 @@
+{
+    "info":  {
+                 "name":  "Student Information Management System API",
+                 "schema":  "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+             },
+    "variable":  [
+                     {
+                         "key":  "base_url",
+                         "value":  "http://127.0.0.1:8000/api/v1"
+                     },
+                     {
+                         "key":  "token",
+                         "value":  ""
+                     }
+                 ],
+    "auth":  {
+                 "type":  "bearer",
+                 "bearer":  [
+                                {
+                                    "key":  "token",
+                                    "value":  "{{token}}",
+                                    "type":  "string"
+                                }
+                            ]
+             },
+    "item":  [
+                 {
+                     "name":  "Authentication",
+                     "item":  [
+                                  {
+                                      "name":  "Login",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "url":  "{{base_url}}/auth/login"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Invalid login",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "url":  "{{base_url}}/auth/login"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Students",
+                     "item":  [
+                                  {
+                                      "name":  "Search filter sort",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{base_url}}/students?search=Juan\u0026program_id=1\u0026year_level=2\u0026sort=last_name\u0026direction=asc\u0026per_page=20"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Validation failure",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "url":  "{{base_url}}/students"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Missing 404",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{base_url}}/students/999999"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Programs",
+                     "item":  [
+                                  {
+                                      "name":  "List",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{base_url}}/programs"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Courses",
+                     "item":  [
+                                  {
+                                      "name":  "List",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{base_url}}/courses"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Academic Terms",
+                     "item":  [
+                                  {
+                                      "name":  "List",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{base_url}}/academic-terms"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Course Offerings",
+                     "item":  [
+                                  {
+                                      "name":  "List",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{base_url}}/course-offerings"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Instructor assigned",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{base_url}}/my/course-offerings"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "List active Instructors",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{base_url}}/instructors"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Enrollments",
+                     "item":  [
+                                  {
+                                      "name":  "Create",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "url":  "{{base_url}}/enrollments"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Duplicate enrollment 409",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "url":  "{{base_url}}/enrollments"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Grades",
+                     "item":  [
+                                  {
+                                      "name":  "Submit",
+                                      "request":  {
+                                                      "method":  "POST",
+                                                      "url":  "{{base_url}}/my/grades"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Forbidden modification 403",
+                                      "request":  {
+                                                      "method":  "PUT",
+                                                      "url":  "{{base_url}}/my/grades/999999"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Academic Records",
+                     "item":  [
+                                  {
+                                      "name":  "Record",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{base_url}}/students/1/academic-record"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Self profile",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{base_url}}/my/student"
+                                                  }
+                                  },
+                                  {
+                                      "name":  "Unauthenticated 401",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{base_url}}/students"
+                                                  }
+                                  }
+                              ]
+                 },
+                 {
+                     "name":  "Instructor Teaching",
+                     "item":  [
+                                  {
+                                      "name":  "Teaching enrollments",
+                                      "request":  {
+                                                      "method":  "GET",
+                                                      "url":  "{{base_url}}/my/teaching-enrollments"
+                                                  }
+                                  }
+                              ]
+                 }
+             ]
+}

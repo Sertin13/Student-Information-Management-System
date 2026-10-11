@@ -1,0 +1,4 @@
+import { ReferenceDataPage } from '../components/ReferenceDataPage.jsx'
+import service from '../services/courseService.js'
+const fields = [{ name: 'course_code', label: 'Course code', required: true }, { name: 'course_title', label: 'Course title', required: true }, { name: 'units', label: 'Units', type: 'number', required: true }, { name: 'description', label: 'Description' }, { name: 'status', label: 'Status', type: 'select', options: ['Active', 'Inactive'], default: 'Active', required: true }]
+export function CoursesPage() { return <ReferenceDataPage title="Courses" service={service} fields={fields} columns={fields.filter((field) => field.name !== 'description')} queryConfig={{ sortOptions: [{ value: 'course_code', label: 'Course code' }, { value: 'course_title', label: 'Course title' }, { value: 'units', label: 'Units' }, { value: 'status', label: 'Status' }] }} /> }

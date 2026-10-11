@@ -1,0 +1,2 @@
+import { useAuth } from '../context/authContext.js'
+export function ProfilePage(){const {user}=useAuth();return <section><h2 className="text-2xl font-semibold">Profile</h2><dl className="mt-5 max-w-lg space-y-3 rounded border bg-white p-5"><div><dt className="text-sm text-slate-500">Name</dt><dd>{user?.name}</dd></div><div><dt className="text-sm text-slate-500">Email</dt><dd>{user?.email}</dd></div><div><dt className="text-sm text-slate-500">Role</dt><dd>{user?.role?.name}</dd></div></dl></section>}

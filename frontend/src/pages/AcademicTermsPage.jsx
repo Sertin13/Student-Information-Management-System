@@ -1,0 +1,4 @@
+import { ReferenceDataPage } from '../components/ReferenceDataPage.jsx'
+import service from '../services/academicTermService.js'
+const fields = [{ name: 'academic_year', label: 'Academic year', required: true }, { name: 'semester', label: 'Semester', required: true }, { name: 'start_date', label: 'Start date', type: 'date', required: true }, { name: 'end_date', label: 'End date', type: 'date', required: true }, { name: 'status', label: 'Status', type: 'select', options: ['Active', 'Inactive'], default: 'Active', required: true }]
+export function AcademicTermsPage() { return <ReferenceDataPage title="Academic Terms" service={service} fields={fields} columns={fields} queryConfig={{ sortOptions: [{ value: 'academic_year', label: 'Academic year' }, { value: 'semester', label: 'Semester' }, { value: 'start_date', label: 'Start date' }, { value: 'end_date', label: 'End date' }, { value: 'status', label: 'Status' }] }} /> }
